@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />  
+    <meta name="viewport" content="user-scalable=no">
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+    <title>boopsnoot</title>
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/6.1.1/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/6.1.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/6.1.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/6.1.1/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/6.1.1/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+<script>
+window.addEventListener("scroll", function(e) { e.preventDefault(); } , false);
+window.addEventListener("touchmove", function(e) { e.preventDefault(); e.stopPropagation(); } , false);
+window.addEventListener("touchstart", function(e) { e.preventDefault(); e.stopPropagation(); } , false);
+document.ontouchmove = function (e) {
+  e.preventDefault();
+};
+document.ontouchstart = function (e) {
+  e.preventDefault();
+};
+
+function preventMotion(event)
+{
+    window.scrollTo(0, 0);
+    event.preventDefault();
+    event.stopPropagation();
+}
+</script>
+
+ <style media="screen">
+    body, html {
+  height: 100%;
+  width: 100%;
+   overflow: hidden;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+.parent{
+width:100%;
+height:140%;
+position: absolute;
+top: -40%;
+}
+.bg { 
+  /* The image used */
+  background-image: url("img/boop.jpg");
+margin: 0;
+    padding: 0;
+position: absolute;
+  /* Full height */
+  height: 100%; 
+  width: 100%;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+    </style>
+  </head>
+  <body><div class="parent"><div class="bg"></div>
+<div style="visibility: hidden;">
+    <p id="load">Firebase SDK loaded with auth, database, messaging, storage</p>
+</div></div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // // ??????????????????????????????????????????????????????????????
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        //
+        // // ??????????????????????????????????????????????????????????????
+
+        try {
+          let app = firebase.app();
+          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
+          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
+  
+
+</body></html>

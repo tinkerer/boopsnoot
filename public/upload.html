@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />  
+    <meta name="viewport" content="user-scalable=no">
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+    <title>boopsnoot</title>
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/6.1.1/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/6.1.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/6.1.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/6.1.1/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/6.1.1/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+  </head>
+Upload Images:
+
+
+<input type="file"
+       id="snoot" name="snoot"
+       accept="image/png, image/jpeg">
+       
+       <script>
+       
+       
+       
+       function firebaseUpload(file)
+       {
+            var storageRef = firebase.storage().ref();
+                   // Create the file metadata
+            var metadata = {
+              contentType: file.type
+            };
+
+            // Upload file and metadata to the object 'images/mountains.jpg'
+            var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
+
+            // Listen for state changes, errors, and completion of the upload.
+            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+              function(snapshot) {
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                  case firebase.storage.TaskState.PAUSED: // or 'paused'
+                    console.log('Upload is paused');
+                    break;
+                  case firebase.storage.TaskState.RUNNING: // or 'running'
+                    console.log('Upload is running');
+                    break;
+                }
+              }, function(error) {
+
+              // A full list of error codes is available at
+              // https://firebase.google.com/docs/storage/web/handle-errors
+              switch (error.code) {
+                case 'storage/unauthorized':
+                  // User doesn't have permission to access the object
+                  break;
+
+                case 'storage/canceled':
+                  // User canceled the upload
+                  break;
+
+                
+
+                case 'storage/unknown':
+                  // Unknown error occurred, inspect error.serverResponse
+                  break;
+              }
+            }, function() {
+              // Upload completed successfully, now we can get the download URL
+              uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                console.log('File available at', downloadURL);
+              });
+            });
+       }
+       var input = document.querySelector('input');
+       
+       function uploadImage() {
+       
+       var curFiles = input.files;
+       for(var i = 0; i < curFiles.length; i++) {
+       firebaseUpload(curFiles[i]);
+       }
+       
+       }
+       
+       
+       
+       input.addEventListener('change', uploadImage);
+       
+       </script>
+    <p id="load">Firebase SDK loaded with auth, database, messaging, storage</p>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // // ??????????????????????????????????????????????????????????????
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        //
+        // // ??????????????????????????????????????????????????????????????
+
+        try {
+          let app = firebase.app();
+          
+          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
+          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
+  
+
+</body></html>
