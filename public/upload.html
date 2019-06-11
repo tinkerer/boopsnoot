@@ -75,6 +75,13 @@ Upload Images:
             }, function() {
               // Upload completed successfully, now we can get the download URL
               uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                var ref = firebase.database().ref();
+                var postsRef = ref.child("uploads");
+                postsRef.push({
+                      url: downloadURL, 
+                      name: file.name
+                    });
+                
                 console.log('File available at', downloadURL);
               });
             });
