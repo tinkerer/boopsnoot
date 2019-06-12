@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>align the bullseye</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/6.1.1/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/6.1.1/firebase-auth.js"></script>
+    <script defer src="/__/firebase/6.1.1/firebase-database.js"></script>
+    <script defer src="/__/firebase/6.1.1/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/6.1.1/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( ".draggable" ).draggable();
+	$( ".resizable" ).resizable();
+  } );
+  </script>
+<style>    
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  50% { transform: scale(0.85); }
+  to { transform: scale(1); }
+}
+
+.fe-pulse {
+  animation-name: pulse;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+
+ 
+.bullseye {
+  height: 100%;
+  width: 100%;
+  
+  border: solid 10px #c00;
+  border-radius: 50%;  
+  transition: border-color 200ms ease-in;
+}
+
+.ring:hover {
+  border-color: #666;
+  
+
+}
+.resizable
+
+{
+height: 100px;
+width: 100px;
+  border: solid 3px #000;
+  padding-bottom: 20px;
+  padding-right: 20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<script>
+function add_file_to_list(file)
+{
+	$("#list-images").append($("<li>").html("<a target='_blank' href='"+file.url+"'>"+file.name +"</a>"));	
+}
+function get_images()
+{
+ var ref = firebase.database().ref();
+ var postsRef = ref.child("uploads");
+ ref.on("value", function(snapshot) {
+ $("#list-images").html("");
+  console.log(snapshot.val());
+  var uploadlist=snapshot.val()['uploads'];
+  for (fileid in uploadlist)
+  {
+	var file = uploadlist[fileid];
+	add_file_to_list(file);
+  }
+  
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});
+}
+</script>
+<button id="get_image_list" onclick="get_images()" >get images</button>
+<ul id="list-images">
+</ul>
+	<div id="bullseye-0-parent" class="resizable draggable">
+    <div id="bullseye-0" class="fe-pulse bullseye"></div>	
+	</div>
+</body>
+</html>
