@@ -18,10 +18,13 @@
   <script>
   $( function() {
     $( ".draggable" ).draggable();
-	$( ".resizable" ).resizable();
+	$( ".resizable" ).resizable({ handles: "n, e, s, w, se, sw, nw, ne" });
   } );
   </script>
-<style>    
+<style>  
+body{
+overflow: hidden;
+}  
 
 @keyframes pulse {
   from { transform: scale(1); }
@@ -54,11 +57,21 @@
 .resizable
 
 {
+position: absolute;
 height: 100px;
 width: 100px;
   border: solid 3px #000;
   padding-bottom: 20px;
   padding-right: 20px;
+}
+#image-container
+{
+max-width: 100%;
+max-height: 100%;
+}
+#image-container img{
+max-width: 100%;
+max-height: 100%;
 }
 </style>
 
@@ -72,6 +85,7 @@ function load_image(fileid)
 {
     console.log(fileid);
     console.log(files[fileid]);
+    $("#image-container").html("");
     $("#image-container").append($("<img>").attr("src",files[fileid]["url"]))
 }
 function add_file_to_list(file,fileid)
