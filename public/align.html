@@ -67,9 +67,16 @@ width: 100px;
 <body>
 
 <script>
-function add_file_to_list(file)
+files = {}
+function load_image(fileid)
 {
-	$("#list-images").append($("<li>").html("<a target='_blank' href='"+file.url+"'>"+file.name +"</a>"));	
+    console.log(fileid);
+    console.log(files[fileid]);
+    $("#image-container").append($("<img>").attr("src",files[fileid]["url"]))
+}
+function add_file_to_list(file,fileid)
+{
+	$("#list-images").append($("<li>").html("<a data-id='"+fileid+"' onclick='load_image(\""+fileid+"\");'>"+file.name +"</a>"));
 }
 function get_images()
 {
@@ -77,12 +84,13 @@ function get_images()
  var postsRef = ref.child("uploads");
  ref.on("value", function(snapshot) {
  $("#list-images").html("");
-  console.log(snapshot.val());
-  var uploadlist=snapshot.val()['uploads'];
+  files = snapshot.val()['uploads'];
+  console.log(files);
+  var uploadlist=files;
   for (fileid in uploadlist)
   {
 	var file = uploadlist[fileid];
-	add_file_to_list(file);
+	add_file_to_list(file,fileid);
   }
   
 }, function (errorObject) {
@@ -96,5 +104,6 @@ function get_images()
 	<div id="bullseye-0-parent" class="resizable draggable">
     <div id="bullseye-0" class="fe-pulse bullseye"></div>	
 	</div>
+    <div id="image-container"></div>
 </body>
 </html>
